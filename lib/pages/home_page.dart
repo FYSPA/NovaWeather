@@ -28,8 +28,8 @@ class _HomePageState extends State<HomePage> {
   bool _is24Hour = false;
 
   final List<String> _diasSemana = [
-    'Hoy',
-    'Mañana',
+    'Lunes',
+    'Martes',
     'Mié',
     'Jue',
     'Vie',
@@ -37,10 +37,14 @@ class _HomePageState extends State<HomePage> {
     'Dom',
   ];
   int _diaSeleccionado = 0;
-
+  int _todayIndex = 0;
   @override
   void initState() {
     super.initState();
+    _todayIndex = DateTime.now().weekday - 1;
+
+    // Al inicio, el día seleccionado es hoy
+    _diaSeleccionado = _todayIndex;
     _loadData();
   }
 
@@ -126,15 +130,6 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 50),
-                  const Text(
-                    'Welcome to NovaWeather',
-                    style: TextStyle(
-                      fontSize: 28,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
 
                   if (_currentWeather != null)
                     WeatherCard(
@@ -150,6 +145,8 @@ class _HomePageState extends State<HomePage> {
                   WeekRow(
                     days: _diasSemana,
                     currentDay: _diaSeleccionado,
+                    todayIndex:
+                        _todayIndex, // <--- 2. Pasamos el índice fijo de hoy
                     onDaySelected: (index) =>
                         setState(() => _diaSeleccionado = index),
                   ),
